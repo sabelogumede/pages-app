@@ -2,20 +2,27 @@
   <ul class="pagination">
     <li 
       class="page-item"
-      [ngClass]="{ disabled: currentPage === 0}"
+      [appClass]="{ disabled: currentPage === 0}"
     >
       <a class="page-link" (click)="currentPage = currentPage - 1">Prev</a>
     </li>
+    <!-- for elements using more then one structural directive we have to use Ng-Container -->
+    <!-- <ng-container *ngFor="let image of images; let i = index"> -->
+
+    <!-- Custom structural directive for looping over items -->
+    <ng-container *appTimes="images.length; let i = index">
+      <li 
+        class="page-item"
+        [appClass]="{ active: i === currentPage }" 
+        *ngIf="checkWindowIndex(i)"
+      >
+        <a (click)="currentPage = i" class="page-link">{{i + 1}}</a>
+      </li>
+    </ng-container>
+    
     <li 
       class="page-item"
-      [ngClass]="{ active: i === currentPage }" 
-      *ngFor="let image of images; let i = index; "
-    >
-      <a (click)="currentPage = i" class="page-link">{{i + 1}}</a>
-    </li>
-    <li 
-      class="page-item"
-      [ngClass]="{ disabled: currentPage === images.length -1}"
+      [appClass]="{ disabled: currentPage === images.length -1}"
     >
       <a class="page-link" (click)="currentPage = currentPage + 1">Next</a>
   </li>
@@ -24,5 +31,28 @@
 
 <div>
   <h4>{{images[currentPage].title}}</h4>
-  <img [src]="images[currentPage].url" />
+  <img [src]="images[currentPage].url" style="max-width: 500px" />
 </div>
+
+<!-- <div [ngSwitch]="currentPage">
+  <div *ngSwitchCase="0">
+    Current Page is Zero
+  </div>
+  <div *ngSwitchCase="0">
+    Current Page is Two
+  </div>
+  <div *ngSwitchCase="3">
+    Current Page is Three
+  </div>
+  <div *ngSwitchCase="4">
+    Current Page is Four
+  </div>
+  <div *ngSwitchDefault>
+    Unkown current page!
+  </div>
+</div> -->
+
+<!-- custom directive - similar to ngFor -->
+<ul *appTimes="5">
+  <li>Hi there!</li>
+</ul>
